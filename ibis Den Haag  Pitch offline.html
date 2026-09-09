@@ -1,0 +1,810 @@
+<title>ibis Den Haag Guest Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* baseline first, so the design's own helmet CSS below still wins */
+:root { color-scheme: light; }
+html { background: #F6F4F2; }
+body { margin: 0; background: #F6F4F2; color: #1E1E1E;
+  font-family: 'Nunito Sans', system-ui, sans-serif; font-size: 17px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+body{margin:0;background:#F6F4F2;color:#1E1E1E;font-family:'Nunito Sans',system-ui,sans-serif;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:#A50034}a:hover{color:#1E1E1E}
+button,textarea{font-family:inherit}
+body{margin:0;-webkit-font-smoothing:antialiased}
+a{color:#003271}a:hover{color:#F26B21}
+textarea{font-family:inherit}
+button{font-family:inherit}
+</style>
+
+<div id="pitch-root"></div>
+
+<template id="tpl-pitch"><div style="min-height:100vh;display:flex;flex-direction:column">
+  <div style="background:#A50034;color:#fff;font-size:15px;font-weight:600;padding:11px 0">
+    <div style="max-width:960px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline">
+      <span>A creative application for the Front Office Employee position by Gabriela Souza.</span>
+      <span style="font-weight:400;color:rgba(255,255,255,.75)">Two steps: try the phone version as a guest, then read why I built it.</span>
+    </div>
+  </div>
+  <header style="background:#1E1E1E;color:#fff;padding:36px 0 0">
+    <div style="max-width:960px;margin:0 auto;padding:0 24px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;border-radius:8px;background:#A50034;color:#fff;font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center;flex:0 0 40px">{{ hotel.mark }}</div>
+        <div style="line-height:1.15"><div style="font-size:16px;font-weight:700">{{ hotel.name }}</div><div style="font-size:13px;color:rgba(255,255,255,.72)">{{ hotel.line }}</div></div>
+      </div>
+      <h1 style="font-size:clamp(30px,5.2vw,50px);line-height:1.06;font-weight:700;margin:26px 0 12px;max-width:18ch;letter-spacing:-.02em;text-wrap:pretty">Welcome. How much time do you have?</h1>
+      <p style="margin:0;max-width:60ch;color:rgba(255,255,255,.82);font-size:17px;text-wrap:pretty">Guests ask our front desk this every day, and we would like to answer it well every time. Tell us three things and we will suggest three places nearby, all of them chosen by the people who work here.</p>
+      <div role="tablist" style="display:flex;flex-wrap:wrap;margin-top:30px;border-bottom:1px solid rgba(255,255,255,.22)">
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+          <button role="tab" aria-selected="{{ tb.on }}" onClick="{{ tb.pick }}" style="appearance:none;border:0;background:none;color:{{ tb.fg }};cursor:pointer;font-weight:600;font-size:15px;padding:12px 18px;border-bottom:3px solid {{ tb.line }};margin-bottom:-1px;white-space:nowrap;flex:none">{{ tb.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex:1;padding:44px 0 80px">
+    <div style="max-width:960px;margin:0 auto;padding:0 24px">
+
+      <sc-if value="{{ isGuest }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start">
+          <div style="flex:1 1 280px;min-width:0;max-width:520px">
+            <p style="font-size:13px;color:#A50034;font-weight:700;margin:0 0 8px;letter-spacing:.06em;text-transform:uppercase;color:#A50034">What the guest sees</p>
+            <h2 style="font-size:26px;line-height:1.2;margin:0 0 12px;font-weight:700;color:#A50034;letter-spacing:-.01em;text-wrap:pretty">A page on their own phone, opened from a QR card at the desk</h2>
+            <p style="color:#6B6461;margin:0 0 26px;text-wrap:pretty">The phone on the right is live. Tap through it exactly as a guest would. Everything it suggests is within easy reach of the hotel, opening times are checked against the real day and hour, and I have verified them myself.</p>
+            <div style="display:flex;flex-direction:column;gap:0">
+              <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid #DDD7D2"><span style="flex:0 0 32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">1</span><div><b style="color:#A50034">Pick a language</b><p style="margin:4px 0 0;color:#6B6461;font-size:15.5px;text-wrap:pretty">English, Nederlands, Deutsch or Espa&#xF1;ol. The choice itself tells the desk who is staying with us this month.</p></div></div>
+              <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid #DDD7D2"><span style="flex:0 0 32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">2</span><div><b style="color:#A50034">Answer three questions</b><p style="margin:4px 0 0;color:#6B6461;font-size:15.5px;text-wrap:pretty">How much time they have, who is with them, and what they would enjoy most right now.</p></div></div>
+              <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid #DDD7D2"><span style="flex:0 0 32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">3</span><div><b style="color:#A50034">Get three places, chosen by us</b><p style="margin:4px 0 0;color:#6B6461;font-size:15.5px;text-wrap:pretty">Only places open right now, nearest first, with walking time, a tip from the desk and, where we have arranged one, a small welcome. Plus one a little further, if there is time. Tap a name for Instagram, an address for the map.</p></div></div>
+              <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid #DDD7D2;border-bottom:1px solid #DDD7D2"><span style="flex:0 0 32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">4</span><div><b style="color:#A50034">Tell us how it went</b><p style="margin:4px 0 0;color:#6B6461;font-size:15.5px;text-wrap:pretty">The suggestions stay on their phone for the whole stay. When they come back, two taps per place tell us whether they went and whether they would recommend it.</p></div></div>
+            </div>
+            <p style="margin:26px 0 0;font-size:15px;color:#6B6461;text-wrap:pretty">That is the guest side. Why it matters to the hotel is in step 2, <b style="color:#A50034">Why I built this</b>, at the top of the page.</p>
+          </div>
+          <div style="flex:0 0 auto;max-width:100%;overflow:hidden">
+            <dc-import name="Holiday Inn Express Guest App" show-notes="{{ false }}" hotel="{{ hotelKey }}" theme="ibis" hint-size="402px,874px"></dc-import>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHotel }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 48px;align-items:start;margin:0 0 40px">
+          <h2 style="font-size:clamp(28px,3.6vw,38px);line-height:1.12;margin:0;font-weight:700;color:#A50034;letter-spacing:-.015em;text-wrap:pretty">Every day, guests ask the desk what to do. We never write the answer down.</h2>
+          <p style="color:#6B6461;margin:0;font-size:17.5px;text-wrap:pretty">The vacancy asks for someone who gives guests tourist information, goes the extra mile and brings their own ideas. This is mine. It is a small tool I built and tested before applying, so that the hotel can answer that daily question well every time, learn from it, and turn it into the kind of moment guests mention in their reviews.</p>
+        </div>
+        <div style="margin:0 0 40px;padding-top:28px;border-top:1px solid #DDD7D2">
+          <h3 style="font-size:20px;margin:0 0 18px;font-weight:700;color:#A50034">How it works</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+            <div style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:14px 14px 16px;min-width:0">
+              <span style="width:32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">1</span>
+              <b style="color:#A50034;font-size:16.5px;line-height:1.25">A QR card at the desk</b>
+              <p style="margin:0;color:#6B6461;font-size:15px;line-height:1.5;text-wrap:pretty">A guest scans it on their own phone and answers three questions: the time they have, who they are travelling with and what they would like to do.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:14px 14px 16px;min-width:0">
+              <span style="width:32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">2</span>
+              <b style="color:#A50034;font-size:16.5px;line-height:1.25">Three suggestions</b>
+              <p style="margin:0;color:#6B6461;font-size:15px;line-height:1.5;text-wrap:pretty">Chosen by our own team, with opening times we have checked ourselves. They stay on the guest&#x2019;s phone for the whole stay, so nobody has to ask twice.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:14px 14px 16px;min-width:0">
+              <span style="width:32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">3</span>
+              <b style="color:#A50034;font-size:16.5px;line-height:1.25">The same answer on every shift</b>
+              <p style="margin:0;color:#6B6461;font-size:15px;line-height:1.5;text-wrap:pretty">Every guest receives the same considered suggestion, whoever happens to be at the desk that day.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:14px 14px 16px;min-width:0">
+              <span style="width:32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">4</span>
+              <b style="color:#A50034;font-size:16.5px;line-height:1.25">A record we do not have today</b>
+              <p style="margin:0;color:#6B6461;font-size:15px;line-height:1.5;text-wrap:pretty">We learn what our guests ask for. At present those conversations happen at the desk and are never written down.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:14px 14px 16px;min-width:0">
+              <span style="width:32px;height:32px;border-radius:50%;background:#A50034;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px">5</span>
+              <b style="color:#A50034;font-size:16.5px;line-height:1.25">A welcome from our partners</b>
+              <p style="margin:0;color:#6B6461;font-size:15px;line-height:1.5;text-wrap:pretty">When guests come back they tell us whether they went and would recommend it. With those numbers we can approach the places we already send guests to and arrange a small welcome.</p>
+            </div>
+          </div>
+          <p style="color:#6B6461;margin:18px 0 0;font-size:15px;text-wrap:pretty">We record the three answers and nothing else. We do not record names, room numbers or email addresses, and because the suggestions are kept on the guest&#x2019;s own phone rather than in a system of ours, there is no record that could be traced back to an individual.</p>
+        </div>
+
+        <p style="background:#F7EEF0;border:1px solid #E2B7C3;border-radius:8px;padding:12px 16px;font-size:15px;margin:0 0 30px;color:#6E1B36"><b>The figures below are invented.</b> They are here to show the shape of what one month would look like, not to report real results.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:#DDD7D2;border:1px solid #DDD7D2;border-radius:10px;overflow:hidden;margin-bottom:34px">
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">612</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">suggestions given in a month</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">31%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">went somewhere we suggested</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">84%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">would send another guest there</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">58%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">had an hour or less</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 48px;align-items:center;margin-bottom:40px">
+          <div>
+        <h3 style="font-size:20px;margin:0 0 6px;font-weight:700;color:#A50034">Which language our guests chose</h3>
+        <p style="color:#6B6461;margin:0;text-wrap:pretty">The page opens in four languages, and the one a guest picks is the fifth thing we learn. It costs nothing to record and it tells the desk something useful: which greetings are worth learning, whose public holiday is coming up, and which nationalities we should be readier for in a given month.</p>
+          </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#DDD7D2;border:1px solid #DDD7D2;border-radius:10px;overflow:hidden">
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">54%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">English</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">21%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">Nederlands</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">16%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">Deutsch</span></div>
+          <div style="background:#fff;padding:18px"><b style="display:block;font-size:34px;line-height:1;font-weight:700;color:#A50034">9%</b><span style="display:block;font-size:14.5px;color:#6B6461;margin-top:7px">Espa&#xF1;ol</span></div>
+        </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:16px 48px;align-items:start;margin:0 0 40px;padding-top:28px;border-top:1px solid #DDD7D2">
+        <h3 style="font-size:20px;margin:0;font-weight:700;color:#A50034">What our guests asked for</h3>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:minmax(140px,210px) minmax(0,1fr) 46px;gap:12px;align-items:center;padding:7px 0;font-size:15.5px">
+              <span>{{ b.label }}</span>
+              <span style="display:block;background:#E6E1DD;height:16px;border-radius:3px;overflow:hidden"><span style="display:block;background:#A50034;height:100%;width:{{ b.w }}"></span></span>
+              <em style="font-style:normal;color:#6B6461;font-size:14.5px;text-align:right">{{ b.pct }}</em>
+            </div>
+          </sc-for>
+        </div>
+        </div>
+
+        <h3 style="font-size:20px;margin:0 0 6px;font-weight:700;color:#A50034">A small thank you our guests can actually use</h3>
+        <p style="color:#6B6461;margin:0 0 20px;text-wrap:pretty">We send these places a steady number of guests every month, and at the moment neither they nor our guests get anything from it. The idea is not a commission for the hotel. It is a small welcome that belongs to the guest, arranged by us, which costs the hotel nothing and is the sort of thing people mention in their reviews.</p>
+
+        <div style="overflow-x:auto;border:1px solid #DDD7D2;border-radius:10px;background:#fff">
+          <table style="width:100%;border-collapse:collapse;font-size:15.5px;min-width:640px">
+            <thead><tr>
+              <th style="text-align:left;padding:12px 14px;border-bottom:1px solid #DDD7D2;font-weight:600;font-size:14px;color:#6B6461;background:#EFEBE8">Partner</th>
+              <th style="text-align:left;padding:12px 14px;border-bottom:1px solid #DDD7D2;font-weight:600;font-size:14px;color:#6B6461;background:#EFEBE8">Suggested / visited</th>
+              <th style="text-align:left;padding:12px 14px;border-bottom:1px solid #DDD7D2;font-weight:600;font-size:14px;color:#6B6461;background:#EFEBE8">Would recommend</th>
+              <th style="text-align:left;padding:12px 14px;border-bottom:1px solid #DDD7D2;font-weight:600;font-size:14px;color:#6B6461;background:#EFEBE8">What our guest would receive</th>
+              <th style="text-align:left;padding:12px 14px;border-bottom:1px solid #DDD7D2;font-weight:600;font-size:14px;color:#6B6461;background:#EFEBE8">Why they would be glad to</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top"><b>De Poentjak</b><br><span style="font-size:14px;color:#6B6461">Kneuterdijk, {{ hotel.dPoentjak }} min</span></td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">124 / 51<br><span style="font-size:14px;color:#6B6461">41% went</span></td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">92%</td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">A table kept for our guests before 19:15</td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">They fill up after 19:15 in any case. This fills the quieter half hour before it.</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top"><b>Het IJskabinet</b><br><span style="font-size:14px;color:#6B6461">Plaats, {{ hotel.dIjs }} min</span></td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">96 / 58<br><span style="font-size:14px;color:#6B6461">60% went</span></td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">88%</td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">A scoop on the house when you show your room key</td>
+                <td style="padding:12px 14px;border-bottom:1px solid #DDD7D2;vertical-align:top">It costs them very little, and families rarely stop at one.</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 14px;vertical-align:top"><b>Filmhuis Den Haag</b><br><span style="font-size:14px;color:#6B6461">Spui, {{ hotel.dFilmhuis }} min</span></td>
+                <td style="padding:12px 14px;vertical-align:top">77 / 19<br><span style="font-size:14px;color:#6B6461">25% went</span></td>
+                <td style="padding:12px 14px;vertical-align:top">79%</td>
+                <td style="padding:12px 14px;vertical-align:top">&#x20AC;2 off a weeknight ticket, or a coffee at the caf&#xE9;</td>
+                <td style="padding:12px 14px;vertical-align:top">Their weeknight screenings are quiet, and weeknights are when our guests are here.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="color:#6B6461;margin:26px 0 40px;text-wrap:pretty">The middle column is the one to watch. Somewhere we suggest a hundred times and our guests visit twelve times is too far, too expensive or closing too early, and it can come off the list without anyone needing to argue about it.</p>
+
+        <h3 style="font-size:20px;margin:0 0 6px;font-weight:700;color:#A50034">What guests tell us in their own words</h3>
+        <p style="color:#6B6461;margin:0 0 20px;text-wrap:pretty">The comment box gives us the two things a tick box never will: places we have not thought of, and how our guests were treated once they arrived somewhere on our recommendation.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:0 0 40px">
+          <div style="background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:16px 18px;font-size:15.5px;text-wrap:pretty">We were seated straight away when we said we were staying at the hotel. Very kind staff.<span style="display:block;margin-top:6px;font-size:14px;color:#6B6461">after De Poentjak</span></div>
+          <div style="background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:16px 18px;font-size:15.5px;text-wrap:pretty">Lovely food, but they had stopped serving by the time we arrived at 21:00. Perhaps worth mentioning at the desk.<span style="display:block;margin-top:6px;font-size:14px;color:#6B6461">after Fat Kee</span></div>
+          <div style="background:#fff;border:1px solid #DDD7D2;border-radius:10px;padding:16px 18px;font-size:15.5px;text-wrap:pretty">We found a wonderful little bookshop caf&#xE9; on Noordeinde that you should add to your list.<span style="display:block;margin-top:6px;font-size:14px;color:#6B6461">somewhere else worth knowing</span></div>
+        </div>
+
+        <div style="border:1px solid #DDD7D2;background:#fff;border-radius:10px;padding:20px 22px">
+          <h3 style="margin:0 0 14px;font-size:18px;color:#A50034">About our guests' privacy</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px 28px">
+          <p style="margin:0;font-size:15.5px;color:#6B6461;text-wrap:pretty">We keep three answers per visit: the time available, the travel context and the preference. No name, no room number and no email address, so nothing here can be traced back to a guest.</p>
+          <p style="margin:0;font-size:15.5px;color:#6B6461;text-wrap:pretty">The suggestions are saved on the guest's own phone. There is no account, no code and no identifier of any kind, which means there is no record anywhere that could single out a guest. What reaches the hotel is a count for each place and nothing more.</p>
+          <p style="margin:0;font-size:15.5px;color:#6B6461;text-wrap:pretty">Our partners receive a number, never a list. The welcome is claimed by showing a room key at the door, so no guest details ever leave the hotel.</p>
+          </div>
+        </div>
+
+        <div style="background:#1E1E1E;color:#fff;border-radius:10px;padding:32px 32px 28px;margin-top:34px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 48px;align-items:start;margin:0 0 28px">
+            <h3 style="margin:0;font-size:clamp(26px,3.2vw,34px);line-height:1.12;font-weight:700;letter-spacing:-.015em;text-wrap:pretty">What I am proposing</h3>
+            <p style="margin:0;font-size:16.5px;color:rgba(255,255,255,.82);text-wrap:pretty">ibis promises guests an easy, warm and unfussy stay, and this is a small way of keeping that promise at the desk. I would like to bring it to Jan Hendrikstraat, and I would be glad to talk it through in person.</p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:rgba(255,255,255,.18);border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18)">
+            <div style="background:#1E1E1E;padding:20px 20px 22px 0"><div style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FF8FA3;margin-bottom:8px">A one-month pilot</div><p style="margin:0;font-size:15.5px;color:rgba(255,255,255,.82);text-wrap:pretty">One QR card on the desk. The page you are looking at is already working, in four languages.</p></div>
+            <div style="background:#1E1E1E;padding:20px 20px"><div style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FF8FA3;margin-bottom:8px">What it costs</div><p style="margin:0;font-size:15.5px;color:rgba(255,255,255,.82);text-wrap:pretty">Nothing. No new system, no account, no supplier. I keep the list of places up to date as part of my shifts.</p></div>
+            <div style="background:#1E1E1E;padding:20px 0 22px 20px"><div style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#FF8FA3;margin-bottom:8px">What we learn</div><p style="margin:0;font-size:15.5px;color:rgba(255,255,255,.82);text-wrap:pretty">After a month we know what our guests ask for, which places they actually go to, and which partners are worth a conversation.</p></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;font-size:15.5px;margin-top:22px">
+            <div style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline"><span style="font-weight:700;font-size:17px">Gabriela Souza</span><a href="mailto:souza.fgabriela@gmail.com" style="color:#fff;text-decoration:underline">souza.fgabriela@gmail.com</a></div>
+            <a href="#try-it" data-go-guest style="color:#fff;background:#A50034;font-weight:600;text-decoration:none;padding:10px 16px;border-radius:8px;white-space:nowrap">See the guest version on a phone &#x2192;</a>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </main>
+
+  <footer style="border-top:1px solid #DDD7D2;padding:26px 0 60px;font-size:14.5px;color:#6B6461">
+    <div style="max-width:960px;margin:0 auto;padding:0 24px;text-wrap:pretty">Prepared by Gabriela Souza for the Front Office position at {{ hotel.full }}. The suggestions are my own, from a year of living a few minutes from the hotel. Opening times were checked in September 2026 and are always worth confirming before sending a guest.<span style="display:block;margin-top:10px">&#xA9; 2026 Gabriela Souza. This concept, its design and its wording are my own work, shared in confidence for the purposes of this application.</span></div>
+  </footer>
+</div></template>
+<template id="tpl-app"><div style="min-height:{{ wrapMinH }};background:{{ wrapBg }};font-family:{{ th.font }};display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start;justify-content:center;padding:{{ wrapPad }};box-sizing:border-box">
+  <sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+  <div style="width:280px;display:flex;flex-direction:column;gap:18px;color:#1B2A41;font-size:14px;line-height:1.45;padding-top:8px">
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5A6A7E">Brand research</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:6px;background:#003271"></span><span><b>#003271</b> Express Blue &#xB7; Pantone 288 C. Primary surface and text.</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:6px;background:#F26B21"></span><span><b>#F26B21</b> Sunrise orange, from the logo's sunburst. One accent only.</span></div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:6px;background:#FFFFFF;box-shadow:inset 0 0 0 1px #CFD6E0"></span><span><b>#FFFFFF</b> White cards on a cool grey <b>#F4F6FA</b> ground.</span></div>
+    </div>
+    <div style="border-top:1px solid #CFD6E0;padding-top:14px">
+      <div style="font-size:26px;font-weight:700;color:#003271;line-height:1.1">Source Sans 3</div>
+      <p style="margin:6px 0 0">The Express wordmark uses a custom humanist sans. Source Sans 3 is the closest open font: same warm, open letterforms. Headings 700, body 400, labels 600.</p>
+    </div>
+    <div style="border-top:1px solid #CFD6E0;padding-top:14px;color:#5A6A7E">Flow: welcome &#x2192; 3 questions &#x2192; 3 staff picks (+ one a little further) &#x2192; feedback. Suggestions respect today's opening hours and the current time. Tap a title for Instagram, an address for Maps.</div>
+  </div>
+  </sc-if>
+  <div style="width:402px;height:874px;max-width:100%;border-radius:48px;overflow:hidden;position:relative;background:{{ th.primary }};box-shadow:0 40px 80px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.12);flex:0 0 auto">
+    <div style="position:absolute;top:11px;left:50%;transform:translateX(-50%);width:126px;height:37px;border-radius:24px;background:#000;z-index:50"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:8px 34px 0;color:#fff;font-size:16px;font-weight:600;z-index:40;pointer-events:none"><span>{{ clock }}</span><span style="display:flex;gap:6px;align-items:center;font-size:12px"><span style="display:flex;align-items:center"><svg width="17" height="11" viewBox="0 0 17 11" aria-hidden="true" style="display:block"><rect x="0" y="7.5" width="3" height="3.5" rx="1" fill="#fff"/><rect x="4.5" y="5" width="3" height="6" rx="1" fill="#fff"/><rect x="9" y="2.5" width="3" height="8.5" rx="1" fill="#fff"/><rect x="13.5" y="0" width="3" height="11" rx="1" fill="#fff"/></svg></span><span style="width:24px;height:11px;border:1.5px solid #fff;border-radius:3px;position:relative;display:inline-block"><span style="position:absolute;inset:2px;background:#fff;border-radius:1px"></span></span></span></div>
+    <div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:139px;height:5px;border-radius:100px;background:rgba(0,0,0,.25);z-index:60;pointer-events:none"></div>
+    <div style="position:absolute;inset:0;overflow:auto">
+    <div style="min-height:100%;background:#F4F6FA;color:#1B2A41;display:flex;flex-direction:column;font-family:{{ th.font }};font-size:17px;line-height:1.45">
+      <div style="background:{{ th.primary }};color:#fff;padding:64px 22px 0">
+        <div style="display:flex;align-items:flex-end;gap:10px">
+          <div style="width:40px;height:40px;border-radius:8px;background:#fff;color:{{ th.primary }};font-weight:700;font-size:26px;display:flex;align-items:center;justify-content:center;flex:0 0 40px">{{ hotel.mark }}</div>
+          <div style="line-height:1.15;padding-bottom:1px">
+            <div style="font-size:16px;font-weight:700;letter-spacing:.01em">{{ hotel.name }}</div>
+            <div style="font-size:13px;color:{{ th.onPrimaryMuted }}">{{ hotel.sub }}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;padding-bottom:14px">
+          <sc-for list="{{ langs }}" as="l" hint-placeholder-count="4">
+            <button onClick="{{ l.pick }}" aria-pressed="{{ l.on }}" style="appearance:none;border:1px solid rgba(255,255,255,.35);background:{{ l.bg }};color:{{ l.fg }};font-size:13px;font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;min-height:32px">{{ l.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="height:4px;background:#D4DBE6"><div style="height:100%;background:{{ th.accent }};width:{{ progPct }};transition:width .25s"></div></div>
+
+      <div style="flex:1;padding:28px 22px 30px">
+        <sc-if value="{{ isS0 }}" hint-placeholder-val="{{ true }}">
+          <h1 style="font-size:30px;line-height:1.12;font-weight:700;margin:0 0 12px;color:{{ th.primary }};letter-spacing:-.01em;text-wrap:pretty">{{ t.welcome }}</h1>
+          <p style="color:#5A6A7E;margin:0 0 26px;font-size:16.5px;text-wrap:pretty">{{ t.sub }}</p>
+          <button onClick="{{ start }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;appearance:none;border:0;cursor:pointer;font-size:18px;font-weight:600;background:{{ th.primary }};color:#fff;border-radius:10px;padding:18px 20px;min-height:56px;text-align:left"><span>{{ t.start }}</span><span style="color:{{ th.accent }};font-size:22px;line-height:1">&#x2192;</span></button>
+          <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ toRev }}" style="appearance:none;background:none;border:0;font-size:15px;color:{{ th.primary }};cursor:pointer;padding:16px 0 0;text-decoration:underline">{{ t.toRev }}</button>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isQ }}" hint-placeholder-val="{{ false }}">
+          <p style="font-size:13px;color:{{ th.accent }};font-weight:700;margin:0 0 8px;letter-spacing:.04em;text-transform:uppercase">{{ stepLabel }}</p>
+          <h2 style="font-size:25px;line-height:1.2;font-weight:700;margin:0 0 20px;color:{{ th.primary }};letter-spacing:-.01em;text-wrap:pretty">{{ question }}</h2>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ options }}" as="o" hint-placeholder-count="4">
+              <button onClick="{{ o.pick }}" style="display:flex;align-items:center;gap:14px;width:100%;text-align:left;appearance:none;cursor:pointer;font-size:18px;background:#fff;border:1px solid #D4DBE6;border-radius:10px;padding:17px 18px;color:#1B2A41;min-height:56px" style-hover="border-color:{{ th.primary }}" style-active="background:#EEF2F8">
+                <span style="width:12px;height:12px;border-radius:50%;flex:0 0 12px;background:{{ o.color }}"></span><span>{{ o.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <button onClick="{{ back }}" style="appearance:none;background:none;border:0;font-size:15px;color:#5A6A7E;cursor:pointer;padding:18px 0 0;text-decoration:underline">{{ t.back }}</button>
+        </sc-if>
+
+        <sc-if value="{{ isS4 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-size:25px;line-height:1.2;font-weight:700;margin:0 0 6px;color:{{ th.primary }};letter-spacing:-.01em">{{ t.resHead }}</h2>
+          <p style="font-size:14px;color:#5A6A7E;margin:0 0 18px">{{ t.nowNote }} {{ todayLabel }}</p>
+          <sc-if value="{{ noCards }}" hint-placeholder-val="{{ false }}"><p style="color:#5A6A7E;margin:0 0 20px">{{ t.none }}</p></sc-if>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+              <article style="background:#fff;border:1px solid #D4DBE6;border-radius:10px;overflow:hidden">
+                <div style="height:6px;background:{{ c.color }}"></div>
+                <div style="padding:16px 18px 18px">
+                  <h3 style="margin:0 0 4px;font-size:20px;font-weight:700;line-height:1.2"><a href="{{ c.ig }}" target="_blank" rel="noopener" style="color:{{ th.primary }};text-decoration:none;border-bottom:1.5px solid #D4DBE6">{{ c.n }}</a></h3>
+                  <p style="font-size:14px;color:#5A6A7E;margin:0 0 4px"><a href="{{ c.maps }}" target="_blank" rel="noopener" style="color:#5A6A7E;text-decoration:underline">{{ c.a }}</a> &#xB7; {{ c.dist }}</p>
+                  <p style="font-size:14px;margin:0 0 10px;display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ c.statusColor }};flex:0 0 8px"></span><span style="color:{{ c.statusColor }};font-weight:600">{{ c.status }}</span><span style="color:#5A6A7E">{{ c.hours }}</span></p>
+                  <p style="margin:0;font-size:16.5px;text-wrap:pretty">{{ c.text }}</p>
+                  <sc-if value="{{ c.hasTip }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;font-size:14.5px;font-weight:600;color:{{ th.primary }}">{{ c.tip }}</p></sc-if>
+                  <sc-if value="{{ c.hasPerk }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;margin-top:12px;font-size:13px;font-weight:700;background:{{ th.perkBg }};color:{{ th.perkFg }};border:1px dashed {{ th.accent }};border-radius:6px;padding:5px 10px">{{ c.perk }}</span></sc-if>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+          <sc-if value="{{ hasFurther }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:13px;color:{{ th.accent }};font-weight:700;margin:24px 0 10px;letter-spacing:.04em;text-transform:uppercase">{{ t.further }}</p>
+            <article style="background:#fff;border:1px dashed {{ th.onPrimaryMuted }};border-radius:10px;padding:16px 18px 18px">
+              <h3 style="margin:0 0 4px;font-size:19px;font-weight:700;line-height:1.2"><a href="{{ far.ig }}" target="_blank" rel="noopener" style="color:{{ th.primary }};text-decoration:none;border-bottom:1.5px solid #D4DBE6">{{ far.n }}</a></h3>
+              <p style="font-size:14px;color:#5A6A7E;margin:0 0 4px"><a href="{{ far.maps }}" target="_blank" rel="noopener" style="color:#5A6A7E;text-decoration:underline">{{ far.a }}</a> &#xB7; {{ far.dist }}</p>
+              <p style="font-size:14px;margin:0 0 10px;display:flex;gap:8px;align-items:center"><span style="width:8px;height:8px;border-radius:50%;background:{{ far.statusColor }};flex:0 0 8px"></span><span style="color:{{ far.statusColor }};font-weight:600">{{ far.status }}</span><span style="color:#5A6A7E">{{ far.hours }}</span></p>
+              <p style="margin:0;font-size:16px;text-wrap:pretty">{{ far.text }}</p>
+              <sc-if value="{{ far.hasTip }}" hint-placeholder-val="{{ false }}"><p style="margin:10px 0 0;font-size:14.5px;font-weight:600;color:{{ th.primary }}">{{ far.tip }}</p></sc-if>
+            </article>
+          </sc-if>
+          <div style="background:{{ th.primary }};color:#fff;border-radius:10px;padding:16px 18px;margin:20px 0 8px"><p style="margin:0;font-size:15px;color:{{ th.onPrimaryMuted }};text-wrap:pretty">{{ t.keep }}</p></div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+            <button onClick="{{ toRev }}" style="appearance:none;cursor:pointer;font-weight:600;font-size:16px;width:100%;background:{{ th.accent }};border:1px solid {{ th.accent }};border-radius:10px;padding:15px;color:#fff;min-height:52px">{{ t.toRev }}</button>
+            <button onClick="{{ again }}" style="appearance:none;cursor:pointer;font-weight:600;font-size:16px;width:100%;background:none;border:1px solid #D4DBE6;border-radius:10px;padding:15px;color:#1B2A41;min-height:52px">{{ t.again }}</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isS5 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-size:25px;line-height:1.2;font-weight:700;margin:0 0 18px;color:{{ th.primary }};letter-spacing:-.01em">{{ t.revHead }}</h2>
+          <sc-if value="{{ noSaved }}" hint-placeholder-val="{{ false }}"><p style="color:#5A6A7E;margin:0 0 20px">{{ t.empty }}</p></sc-if>
+          <div style="display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+              <div style="background:#fff;border:1px solid #D4DBE6;border-radius:10px;padding:16px 18px">
+                <h3 style="margin:0 0 12px;font-size:18px;font-weight:700;color:{{ th.primary }}">{{ r.n }}</h3>
+                <p style="margin:0 0 7px;font-size:15.5px;color:#5A6A7E">{{ t.went }}</p>
+                <div style="display:flex;gap:7px;margin-bottom:12px">
+                  <button onClick="{{ r.wentYes }}" style="appearance:none;cursor:pointer;font-size:15px;background:{{ r.wentYesBg }};border:1px solid {{ r.wentYesBd }};border-radius:8px;padding:9px 16px;white-space:nowrap;color:{{ r.wentYesFg }};min-height:44px">{{ t.yes }}</button>
+                  <button onClick="{{ r.wentNo }}" style="appearance:none;cursor:pointer;font-size:15px;background:{{ r.wentNoBg }};border:1px solid {{ r.wentNoBd }};border-radius:8px;padding:9px 16px;white-space:nowrap;color:{{ r.wentNoFg }};min-height:44px">{{ t.notyet }}</button>
+                </div>
+                <p style="margin:0 0 7px;font-size:15.5px;color:#5A6A7E">{{ t.rec }}</p>
+                <div style="display:flex;gap:7px">
+                  <button onClick="{{ r.recYes }}" style="appearance:none;cursor:pointer;font-size:15px;background:{{ r.recYesBg }};border:1px solid {{ r.recYesBd }};border-radius:8px;padding:9px 16px;white-space:nowrap;color:{{ r.recYesFg }};min-height:44px">{{ t.yes }}</button>
+                  <button onClick="{{ r.recNo }}" style="appearance:none;cursor:pointer;font-size:15px;background:{{ r.recNoBg }};border:1px solid {{ r.recNoBd }};border-radius:8px;padding:9px 16px;white-space:nowrap;color:{{ r.recNoFg }};min-height:44px">{{ t.no }}</button>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ hasSaved }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px solid #D4DBE6;border-radius:10px;padding:16px 18px">
+              <label style="display:block;font-size:15.5px;font-weight:600;margin:0 0 6px">{{ t.lOther }}</label>
+              <textarea value="{{ other }}" onChange="{{ setOther }}" placeholder="{{ t.phOther }}" style="width:100%;box-sizing:border-box;font-size:16px;padding:11px 12px;border:1px solid #D4DBE6;border-radius:8px;min-height:74px;resize:vertical;background:#F4F6FA"></textarea>
+              <label style="display:block;font-size:15.5px;font-weight:600;margin:14px 0 6px">{{ t.lServ }}</label>
+              <textarea value="{{ service }}" onChange="{{ setService }}" placeholder="{{ t.phServ }}" style="width:100%;box-sizing:border-box;font-size:16px;padding:11px 12px;border:1px solid #D4DBE6;border-radius:8px;min-height:74px;resize:vertical;background:#F4F6FA"></textarea>
+              <p style="font-size:14.5px;color:{{ th.primary }};font-weight:600;margin:12px 0 0;min-height:1.3em">{{ okMsg }}</p>
+              <button onClick="{{ send }}" disabled="{{ sent }}" style="appearance:none;cursor:pointer;font-weight:600;font-size:16px;width:100%;background:{{ th.primary }};border:1px solid {{ th.primary }};border-radius:10px;padding:15px;color:#fff;margin-top:8px;min-height:52px;opacity:{{ sendOpacity }}">{{ t.send }}</button>
+            </div>
+            </sc-if>
+          </div>
+          <button onClick="{{ revBack }}" style="appearance:none;cursor:pointer;font-weight:600;font-size:16px;width:100%;background:none;border:1px solid #D4DBE6;border-radius:10px;padding:15px;color:#1B2A41;margin-top:14px;min-height:52px">{{ t.revBack }}</button>
+        </sc-if>
+      </div>
+      <div style="padding:18px 22px 44px;font-size:13px;color:#5A6A7E;border-top:1px solid #D4DBE6">{{ t.foot }}</div>
+    </div>
+    </div>
+  </div>
+</div></template>
+
+<script>
+/* dc-lite - a ~150-line stand-in for the Claude Design runtime.
+   Same template dialect ({{ path }}, sc-if, sc-for, onClick/onChange, dc-import),
+   no React, no external scripts. Full re-render per state change; the templates
+   are small enough that this is instant. */
+(function () {
+  // the phone mock is a fixed 402px column; without a viewport meta a real phone
+  // lays the page out at 980px and shrinks it to illegibility
+  if (!document.querySelector('meta[name="viewport"]')) {
+    const m = document.createElement('meta');
+    m.name = 'viewport';
+    m.content = 'width=device-width, initial-scale=1';
+    document.head.appendChild(m);
+  }
+  const resolve = (path, scope) => {
+    const t = path.trim();
+    if (t === 'true') return true;
+    if (t === 'false') return false;
+    let v = scope;
+    for (const k of t.split('.')) {
+      if (v == null) return undefined;
+      v = v[k];
+    }
+    return v;
+  };
+  const RX = /\{\{([^}]*)\}\}/g;
+  const interp = (str, scope) => {
+    const whole = str.match(/^\s*\{\{([^}]*)\}\}\s*$/);
+    if (whole) return resolve(whole[1], scope);
+    return str.replace(RX, (_, p) => {
+      const v = resolve(p, scope);
+      return v == null ? '' : String(v);
+    });
+  };
+  const camel = s => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+
+  class DCLogic {
+    constructor(props, host, mount) {
+      this.props = props || {};
+      this._host = host;
+      this._mount = mount;
+      this._queued = false;
+    }
+    setState(partial, cb) {
+      const next = typeof partial === 'function' ? partial(this.state) : partial;
+      this.state = Object.assign({}, this.state, next);
+      this._render();
+      if (cb) cb();
+    }
+    _render() { this._mount(this); }
+    renderVals() { return {}; }
+  }
+  window.DCLogic = DCLogic;
+
+  /* ---- focus preservation across a full re-render ---- */
+  function snapshotFocus(root) {
+    const el = document.activeElement;
+    if (!el || !root.contains(el)) return null;
+    const path = [];
+    let n = el;
+    while (n && n !== root) {
+      path.unshift(Array.prototype.indexOf.call(n.parentNode.childNodes, n));
+      n = n.parentNode;
+    }
+    return { path, start: el.selectionStart, end: el.selectionEnd };
+  }
+  function restoreFocus(root, snap) {
+    if (!snap) return;
+    let n = root;
+    for (const i of snap.path) {
+      if (!n || !n.childNodes[i]) return;
+      n = n.childNodes[i];
+    }
+    if (!n || !n.focus) return;
+    n.focus();
+    if (snap.start != null && n.setSelectionRange) {
+      try { n.setSelectionRange(snap.start, snap.end); } catch (e) {}
+    }
+  }
+
+  /* ---- template -> DOM ---- */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function build(node, scope, out, ns) {
+    for (const child of node.childNodes) {
+      if (child.nodeType === 3) {
+        const txt = child.nodeValue;
+        out.appendChild(document.createTextNode(RX.test(txt) ? interp(txt, scope) : txt));
+        RX.lastIndex = 0;
+        continue;
+      }
+      if (child.nodeType !== 1) continue;
+      const tag = child.tagName.toLowerCase();
+
+      if (tag === 'sc-if') {
+        if (interp(child.getAttribute('value') || '', scope)) build(child, scope, out, ns);
+        continue;
+      }
+      if (tag === 'sc-for') {
+        const list = interp(child.getAttribute('list') || '', scope) || [];
+        const as = child.getAttribute('as') || 'item';
+        for (const item of list) {
+          const inner = Object.create(scope);
+          inner[as] = item;
+          build(child, inner, out, ns);
+        }
+        continue;
+      }
+      if (tag === 'dc-import') {
+        const props = {};
+        for (const a of child.attributes) {
+          if (a.name === 'name' || a.name.startsWith('hint-')) continue;
+          props[camel(a.name)] = interp(a.value, scope);
+        }
+        const holder = document.createElement('div');
+        out.appendChild(holder);
+        mountComponent(child.getAttribute('name'), props, holder);
+        continue;
+      }
+
+      const childNs = ns || (tag === 'svg' ? SVG_NS : null);
+      const el = childNs ? document.createElementNS(childNs, tag) : document.createElement(tag);
+      for (const a of child.attributes) {
+        const name = a.name, value = a.value;
+        if (name.startsWith('hint-')) continue;
+        if (/^on[A-Z]/.test(name) || /^on(click|change|input)$/i.test(name)) {
+          const fn = interp(value, scope);
+          if (typeof fn === 'function') {
+            const evt = name.toLowerCase() === 'onchange' ? 'input' : name.toLowerCase().slice(2);
+            el.addEventListener(evt, fn);
+          }
+          continue;
+        }
+        if (name === 'style-hover' || name === 'style-active') {
+          const css = interp(value, scope);
+          const enter = name === 'style-hover' ? ['mouseenter', 'mouseleave'] : ['mousedown', 'mouseup'];
+          el.addEventListener(enter[0], () => el.setAttribute('style', el.dataset.baseStyle + ';' + css));
+          el.addEventListener(enter[1], () => el.setAttribute('style', el.dataset.baseStyle));
+          continue;
+        }
+        const v = interp(value, scope);
+        if (name === 'value' && (tag === 'textarea' || tag === 'input')) { el.value = v == null ? '' : v; continue; }
+        if (name === 'disabled') { if (v) el.setAttribute('disabled', ''); continue; }
+        if (v === false || v == null) { if (name.startsWith('aria-')) el.setAttribute(name, 'false'); continue; }
+        el.setAttribute(name, v === true ? 'true' : String(v));
+        if (name === 'style') el.dataset.baseStyle = String(v);
+      }
+      build(child, scope, el, childNs);
+      out.appendChild(el);
+    }
+  }
+
+  /* ---- component registry ---- */
+  const registry = {};
+  window.dcRegister = (name, Klass, templateId) => { registry[name] = { Klass, templateId }; };
+
+  function mountComponent(name, props, host) {
+    const entry = registry[name];
+    if (!entry) return null;
+    const tpl = document.getElementById(entry.templateId).content;
+    const mount = inst => {
+      const snap = snapshotFocus(host);
+      const frag = document.createDocumentFragment();
+      build(tpl, inst.renderVals(), frag);
+      host.textContent = '';
+      host.appendChild(frag);
+      restoreFocus(host, snap);
+    };
+    const inst = new entry.Klass(props, host, mount);
+    mount(inst);
+    if (inst.componentDidMount) inst.componentDidMount();
+    return inst;
+  }
+  window.dcMount = mountComponent;
+})();
+
+</script>
+
+<script>
+/* Guest app - logic verbatim from the original design file */
+const GuestApp = (function () {
+const HOTELS = {
+  hiex: { mark:'H', name:'Holiday Inn Express', sub:'The Hague \u2014 Parliament', addr:'Lange Houtstraat 5' },
+  ibis: { mark:'i', name:'ibis Den Haag City Centre', sub:'Jan Hendrikstraat 10', addr:'Jan Hendrikstraat 10' }
+};
+const LANGS = {
+  en:{label:'English',welcome:'Welcome to The Hague',sub:'Tell us three things and we will suggest three places near the hotel, all chosen by the people who work here.',start:'Find something to do',step:['Question 1 of 3','Question 2 of 3','Question 3 of 3'],q:['How much time do you have?','Who is with you?','What would you enjoy most right now?'],a1:['Half an hour','About an hour','An afternoon','The whole evening'],a2:['Here for work, on my own','Two of us','A group or family'],a3:['A good meal','Something sweet','Fresh air and a walk','Something beautiful to look at','Somewhere to sit and unwind'],back:'Back',again:'Start again',resHead:'Three places for you',nowNote:'Open today, checked against the time right now.',none:'Nothing on our list is open right now for that. Do come and ask us at the desk.',keep:'These are saved on your phone, so you can come back to this page any time during your stay. When you get back, do let us know how it went.',walk:'min walk',further:'A little further, if you have time',openNow:'Open now',closesSoon:'Closes soon',opensAt:'Opens at',closed:'Closed now',always:'Always open',toRev:'Tell us how it went',revHead:'How was it?',revBack:'Back',went:'Did you manage to go?',rec:'Would you recommend it to another guest?',yes:'Yes',no:'No',notyet:'Not this time',lOther:'Somewhere you enjoyed that is not on our list',lServ:'How were you looked after once you got there?',phOther:'A caf\u00E9, a shop, a walk \u2014 anything you would recommend.',phServ:'Warmly welcomed, kept waiting, worth going back to.',saved:'Saved on your phone.',send:'Send to the front desk',sent:'Thank you. That is very helpful.',empty:'Nothing saved yet. Answer the three questions first.',foot:'Front desk open 24 hours. Ask us anything.',dayNames:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']},
+  nl:{label:'Nederlands',welcome:'Welkom in Den Haag',sub:'Vertel ons drie dingen en wij stellen drie plekken in de buurt voor, allemaal uitgekozen door onze eigen medewerkers.',start:'Vind iets leuks',step:['Vraag 1 van 3','Vraag 2 van 3','Vraag 3 van 3'],q:['Hoeveel tijd heeft u?','Met wie bent u hier?','Waar heeft u nu het meeste zin in?'],a1:['Een half uur','Ongeveer een uur','Een middag','De hele avond'],a2:['Voor werk, alleen','Met z\u2019n twee\u00EBn','Een groep of gezin'],a3:['Lekker eten','Iets zoets','Frisse lucht en een wandeling','Iets moois om te zien','Ergens rustig zitten'],back:'Terug',again:'Opnieuw beginnen',resHead:'Drie plekken voor u',nowNote:'Vandaag open, gecontroleerd op dit moment.',none:'Hier is nu niets passends voor open. Loop gerust even langs de receptie.',keep:'Deze zijn opgeslagen op uw telefoon, dus u kunt tijdens uw verblijf altijd terugkomen op deze pagina. Laat ons daarna weten hoe het was.',walk:'min lopen',further:'Iets verder, als u tijd heeft',openNow:'Nu open',closesSoon:'Sluit binnenkort',opensAt:'Opent om',closed:'Nu gesloten',always:'Altijd open',toRev:'Vertel ons hoe het was',revHead:'Hoe was het?',revBack:'Terug',went:'Bent u er geweest?',rec:'Zou u het een andere gast aanraden?',yes:'Ja',no:'Nee',notyet:'Deze keer niet',lOther:'Een plek die u leuk vond en die niet op onze lijst staat',lServ:'Hoe werd u daar ontvangen?',phOther:'Een caf\u00E9, een winkel, een wandeling \u2014 alles wat u zou aanraden.',phServ:'Hartelijk ontvangen, lang gewacht, zeker een aanrader.',saved:'Opgeslagen op uw telefoon.',send:'Naar de receptie sturen',sent:'Dank u wel. Daar hebben wij veel aan.',empty:'Nog niets opgeslagen. Beantwoord eerst de drie vragen.',foot:'Receptie 24 uur per dag open. Vraag ons gerust iets.',dayNames:['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag']},
+  de:{label:'Deutsch',welcome:'Willkommen in Den Haag',sub:'Sagen Sie uns drei Dinge und wir schlagen Ihnen drei Orte in der N\u00E4he vor, alle von unseren Mitarbeitern ausgew\u00E4hlt.',start:'Etwas unternehmen',step:['Frage 1 von 3','Frage 2 von 3','Frage 3 von 3'],q:['Wie viel Zeit haben Sie?','Wer ist bei Ihnen?','Worauf h\u00E4tten Sie jetzt am meisten Lust?'],a1:['Eine halbe Stunde','Etwa eine Stunde','Einen Nachmittag','Den ganzen Abend'],a2:['Gesch\u00E4ftlich, allein','Zu zweit','Eine Gruppe oder Familie'],a3:['Gut essen','Etwas S\u00FC\u00DFes','Frische Luft und ein Spaziergang','Etwas Sch\u00F6nes sehen','Irgendwo sitzen und entspannen'],back:'Zur\u00FCck',again:'Neu beginnen',resHead:'Drei Orte f\u00FCr Sie',nowNote:'Heute ge\u00F6ffnet, gepr\u00FCft f\u00FCr die aktuelle Uhrzeit.',none:'Dazu ist gerade nichts Passendes ge\u00F6ffnet. Kommen Sie gern an die Rezeption.',keep:'Diese sind auf Ihrem Telefon gespeichert, Sie k\u00F6nnen also jederzeit zur\u00FCckkommen. Sagen Sie uns danach gern, wie es war.',walk:'Min. zu Fu\u00DF',further:'Etwas weiter, wenn Sie Zeit haben',openNow:'Jetzt ge\u00F6ffnet',closesSoon:'Schlie\u00DFt bald',opensAt:'\u00D6ffnet um',closed:'Jetzt geschlossen',always:'Immer ge\u00F6ffnet',toRev:'Erz\u00E4hlen Sie uns, wie es war',revHead:'Wie war es?',revBack:'Zur\u00FCck',went:'Waren Sie dort?',rec:'W\u00FCrden Sie es einem anderen Gast empfehlen?',yes:'Ja',no:'Nein',notyet:'Diesmal nicht',lOther:'Ein Ort, der Ihnen gefallen hat und nicht auf unserer Liste steht',lServ:'Wie wurden Sie dort empfangen?',phOther:'Ein Caf\u00E9, ein Gesch\u00E4ft, ein Spaziergang \u2014 alles, was Sie empfehlen w\u00FCrden.',phServ:'Herzlich empfangen, lange gewartet, auf jeden Fall wieder.',saved:'Auf Ihrem Telefon gespeichert.',send:'An die Rezeption senden',sent:'Vielen Dank. Das hilft uns sehr.',empty:'Noch nichts gespeichert. Beantworten Sie zuerst die drei Fragen.',foot:'Rezeption rund um die Uhr ge\u00F6ffnet. Fragen Sie uns gern.',dayNames:['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag']},
+  es:{label:'Espa\u00F1ol',welcome:'Bienvenido a La Haya',sub:'Cu\u00E9ntenos tres cosas y le sugeriremos tres lugares cerca del hotel, todos elegidos por quienes trabajamos aqu\u00ED.',start:'Buscar algo que hacer',step:['Pregunta 1 de 3','Pregunta 2 de 3','Pregunta 3 de 3'],q:['\u00BFCu\u00E1nto tiempo tiene?','\u00BFCon qui\u00E9n viaja?','\u00BFQu\u00E9 le apetece m\u00E1s ahora mismo?'],a1:['Media hora','Una hora m\u00E1s o menos','Una tarde','Toda la noche'],a2:['Por trabajo, solo','Somos dos','Un grupo o una familia'],a3:['Comer bien','Algo dulce','Aire fresco y un paseo','Algo bonito que ver','Un sitio para sentarse y descansar'],back:'Atr\u00E1s',again:'Empezar de nuevo',resHead:'Tres lugares para usted',nowNote:'Abiertos hoy, comprobado a la hora actual.',none:'No tenemos nada abierto ahora que encaje. Preg\u00FAntenos en recepci\u00F3n.',keep:'Est\u00E1n guardados en su tel\u00E9fono, as\u00ED que puede volver a esta p\u00E1gina cuando quiera. Despu\u00E9s, cu\u00E9ntenos qu\u00E9 tal fue.',walk:'min a pie',further:'Un poco m\u00E1s lejos, si tiene tiempo',openNow:'Abierto ahora',closesSoon:'Cierra pronto',opensAt:'Abre a las',closed:'Cerrado ahora',always:'Siempre abierto',toRev:'Cu\u00E9ntenos qu\u00E9 tal fue',revHead:'\u00BFQu\u00E9 tal fue?',revBack:'Atr\u00E1s',went:'\u00BFPudo ir?',rec:'\u00BFSe lo recomendar\u00EDa a otro hu\u00E9sped?',yes:'S\u00ED',no:'No',notyet:'Esta vez no',lOther:'Un lugar que le gust\u00F3 y no est\u00E1 en nuestra lista',lServ:'\u00BFC\u00F3mo le atendieron cuando lleg\u00F3?',phOther:'Un caf\u00E9, una tienda, un paseo \u2014 lo que recomendar\u00EDa.',phServ:'Muy bien recibidos, mucha espera, volver\u00EDamos.',saved:'Guardado en su tel\u00E9fono.',send:'Enviar a recepci\u00F3n',sent:'Gracias. Nos ayuda mucho.',empty:'Todav\u00EDa no hay nada guardado. Responda primero las tres preguntas.',foot:'Recepci\u00F3n abierta 24 horas. Preg\u00FAntenos lo que necesite.',dayNames:['domingo','lunes','martes','mi\u00E9rcoles','jueves','viernes','s\u00E1bado']}
+};
+// days: 0=Sun..6=Sat. hours: [[open,close]] in "HH:MM"; [] = always open. hd: per-weekday hours override.
+const ALL=[0,1,2,3,4,5,6], TUESUN=[0,2,3,4,5,6], WEDSUN=[0,3,4,5,6], THUSUN=[0,4,5,6], FRISUN=[0,5,6];
+const P = [
+  {id:'queru',n:'QUERU Cantina Mexicana',a:'Prinsestraat 30',w:{hiex:9,ibis:3},cat:'eat',days:ALL,hours:[['18:00','22:00']],hd:{5:[['18:00','22:30']],6:[['18:00','22:30']]},mood:['eat'],who:['two','group'],time:['evening'],
+   t:{en:'Modern Mexican cooking on a small, lively street a few minutes from our door. Booking is essential, as it is a small room and it fills every evening.',nl:'Moderne Mexicaanse keuken in een klein, levendig straatje op een paar minuten van onze deur. Reserveren is nodig: het is klein en elke avond vol.',de:'Moderne mexikanische K\u00FCche in einer kleinen, lebhaften Stra\u00DFe wenige Minuten von unserer T\u00FCr. Reservierung n\u00F6tig, der Raum ist klein und jeden Abend voll.',es:'Cocina mexicana moderna en una calle peque\u00F1a y animada a pocos minutos de nuestra puerta. Imprescindible reservar: es peque\u00F1o y se llena cada noche.'},
+   tip:{en:'We are happy to book for you.',nl:'Wij reserveren graag voor u.',de:'Wir reservieren gern f\u00FCr Sie.',es:'Con gusto le reservamos.'}},
+  {id:'ohana',n:'Ohana Pok\u00E9 & More',a:'Prinsestraat 18',w:{hiex:8,ibis:3},cat:'eat',days:ALL,hours:[['12:00','20:30']],mood:['eat'],who:['work','two'],time:['half','hour'],
+   t:{en:'Fresh pok\u00E9 bowls, quickly served, for when the gap between meetings is shorter than you would like.',nl:'Verse pok\u00E9bowls, snel geserveerd, voor als het gaatje tussen twee afspraken klein is.',de:'Frische Pok\u00E9-Bowls, schnell serviert, wenn die L\u00FCcke zwischen zwei Terminen knapp ist.',es:'Bowls de pok\u00E9 frescos y r\u00E1pidos, para cuando el hueco entre reuniones es corto.'},
+   tip:{en:'They also deliver to the hotel if you would rather stay in.',nl:'Zij bezorgen ook bij het hotel.',de:'Sie liefern auch ins Hotel.',es:'Tambi\u00E9n reparten al hotel.'}},
+  {id:'baladi',n:'Baladi Manouche',a:'Torenstraat 95',w:{hiex:12,ibis:5},cat:'eat',days:TUESUN,hours:[['11:00','18:00']],mood:['eat'],who:['work','two'],time:['half','hour','afternoon'],
+   t:{en:'Lebanese bakery where the manouche comes out of the oven in front of you. Excellent value and quick, which makes it a good lunch.',nl:'Libanese bakkerij waar de manouche voor uw ogen uit de oven komt. Goed geprijsd en snel, dus een prima lunch.',de:'Libanesische B\u00E4ckerei, in der die Manouche vor Ihren Augen aus dem Ofen kommt. Preiswert und schnell, ideal zum Mittag.',es:'Panader\u00EDa libanesa donde el manouche sale del horno delante de usted. Muy buen precio y r\u00E1pido, ideal para comer.'}},
+  {id:'daydream',n:'Day Dream Deli',a:'Molenstraat 65A',w:{hiex:9,ibis:5},cat:'eat',days:ALL,hours:[['12:00','20:30']],mood:['eat'],who:['work','two','group'],time:['hour','afternoon','evening'],
+   t:{en:'Burgers, brisket and pastrami sandwiches from a small deli that our guests consistently come back and thank us for. There is often a queue, and it moves quickly.',nl:'Burgers, brisket en pastramibroodjes van een kleine deli waar onze gasten ons steeds voor komen bedanken. Vaak een rij, maar die gaat snel.',de:'Burger, Brisket und Pastrami-Sandwiches aus einem kleinen Deli, f\u00FCr das sich unsere G\u00E4ste immer wieder bedanken. Oft eine Schlange, die aber schnell geht.',es:'Hamburguesas, brisket y bocadillos de pastrami de un peque\u00F1o deli por el que nuestros hu\u00E9spedes siempre vuelven a darnos las gracias. Suele haber cola, pero avanza r\u00E1pido.'}},
+  {id:'fatkee',n:'Fat Kee',a:'Gedempte Gracht 23',w:{hiex:6,ibis:6},cat:'eat',days:TUESUN,hours:[['12:00','21:30']],mood:['eat'],who:['group','two','work'],time:['evening','afternoon'],
+   t:{en:'A Chinese-Indonesian restaurant that has been here for decades, with a long menu and very generous plates.',nl:'Een Chinees-Indonesisch restaurant dat hier al decennia zit, met een lange kaart en royale porties.',de:'Ein chinesisch-indonesisches Restaurant, seit Jahrzehnten hier, mit langer Karte und gro\u00DFz\u00FCgigen Portionen.',es:'Un restaurante chino-indonesio de toda la vida, con una carta larga y raciones muy generosas.'},
+   tip:{en:'It gets busy. We are happy to book a table for you.',nl:'Het is er druk. Wij reserveren graag voor u.',de:'Es wird voll. Wir reservieren gern f\u00FCr Sie.',es:'Se llena. Con gusto le reservamos mesa.'}},
+  {id:'irodion',n:'Irodion',a:'Grote Markt 19',w:{hiex:7,ibis:4},cat:'eat',days:FRISUN,hours:[['11:00','22:00']],mood:['eat'],who:['group','two'],time:['evening','afternoon'],
+   t:{en:'Greek cooking on the liveliest square in the city, priced so that a group can eat well together.',nl:'Griekse keuken op het levendigste plein van de stad, met prijzen waar een groep prima mee uit de voeten kan.',de:'Griechische K\u00FCche am lebhaftesten Platz der Stadt, zu Preisen, mit denen eine Gruppe gut essen kann.',es:'Cocina griega en la plaza m\u00E1s animada de la ciudad, a precios que permiten comer bien en grupo.'}},
+  {id:'proef',n:'Proefboutique',a:'Oude Molstraat 28A',w:{hiex:9,ibis:4},cat:'eat',days:THUSUN,hours:[['12:00','22:00']],mood:['eat'],who:['two'],time:['evening'],
+   t:{en:'Small sharing plates on a quiet old street behind the Noordeinde palace. Our first suggestion when two people are marking an occasion.',nl:'Kleine deelgerechten in een rustig oud straatje achter Paleis Noordeinde. Onze eerste tip voor een gelegenheid met z\u2019n twee\u00EBn.',de:'Kleine Gerichte zum Teilen in einer ruhigen Altstadtgasse hinter dem Noordeinde-Palast. Unser erster Tipp f\u00FCr einen besonderen Abend zu zweit.',es:'Platos peque\u00F1os para compartir en una calle tranquila detr\u00E1s del palacio Noordeinde. Nuestra primera opci\u00F3n para una ocasi\u00F3n especial.'}},
+  {id:'poentjak',n:'De Poentjak',a:'Kneuterdijk 16',w:{hiex:9,ibis:7},cat:'eat',days:ALL,hours:[['12:00','15:00'],['17:00','22:00']],mood:['eat'],who:['two','group'],time:['evening'],
+   t:{en:'Indonesian, and the rijsttafel is the one meal we suggest every visitor tries at least once.',nl:'Indonesisch, en de rijsttafel is het gerecht dat wij elke gast minstens \u00E9\u00E9n keer aanraden.',de:'Indonesisch, und die Reistafel ist das Gericht, das wir jedem Gast einmal empfehlen.',es:'Indonesio, y la rijsttafel es el plato que recomendamos probar al menos una vez.'},
+   tip:{en:'Please let us book for you. It is usually full after 19:15.',nl:'Laat ons reserveren. Na 19:15 zit het meestal vol.',de:'Lassen Sie uns reservieren. Nach 19:15 Uhr ist es meist voll.',es:'Perm\u00EDtanos reservar. Despu\u00E9s de las 19:15 suele estar lleno.'},
+   perk:{en:'A table kept for our guests before 19:15',nl:'Een tafel gereserveerd voor onze gasten v\u00F3\u00F3r 19:15',de:'Ein Tisch f\u00FCr unsere G\u00E4ste vor 19:15 Uhr',es:'Una mesa reservada para nuestros hu\u00E9spedes antes de las 19:15'}},
+  {id:'fatphill',n:"Fat Phill's Diner",a:'Gedempte Gracht 78',w:{hiex:7,ibis:7},cat:'eat',days:ALL,hours:[['11:45','23:00']],hd:{5:[['11:45','01:00']],6:[['11:45','01:00']]},mood:['eat'],who:['group','work'],time:['evening','hour'],
+   t:{en:'Generous burgers and loaded fries, halal, and open later than almost anything else nearby.',nl:'Royale burgers en volle friet, halal, en later open dan bijna alles in de buurt.',de:'Gro\u00DFz\u00FCgige Burger und belegte Pommes, halal, und sp\u00E4ter ge\u00F6ffnet als fast alles in der N\u00E4he.',es:'Hamburguesas generosas y patatas cargadas, halal, y abierto m\u00E1s tarde que casi todo lo cercano.'}},
+  {id:'bartine',n:'Bartine Bakery',a:'Piet Heinstraat 72',w:{hiex:20,ibis:10},cat:'eat',days:ALL,hours:[['08:00','16:00']],mood:['eat'],who:['two','work'],time:['hour','afternoon'],
+   t:{en:'Worth the walk west into Zeeheldenkwartier for the pastries and the coffee, with the usual queue of local residents outside.',nl:'De wandeling westwaarts naar het Zeeheldenkwartier meer dan waard, voor het gebak en de koffie. Meestal staat er een rij buurtbewoners.',de:'Der Spaziergang westw\u00E4rts ins Zeeheldenkwartier lohnt sich f\u00FCr das Geb\u00E4ck und den Kaffee. Meist steht eine Schlange Einheimischer an.',es:'Merece el paseo hacia el oeste, al Zeeheldenkwartier, por la boller\u00EDa y el caf\u00E9. Suele haber cola de vecinos.'},
+   tip:{en:'Closes at 16:00. Piet, four doors along, makes the best ice cream in the city.',nl:'Sluit om 16:00. Piet, vier deuren verder, maakt het beste ijs van de stad.',de:'Schlie\u00DFt um 16:00 Uhr. Piet, vier T\u00FCren weiter, macht das beste Eis der Stadt.',es:'Cierra a las 16:00. Piet, cuatro puertas m\u00E1s all\u00E1, hace el mejor helado de la ciudad.'}},
+  {id:'torres',n:'Se\u00F1or Torres',a:'Zoutmanstraat 57',w:{hiex:25,ibis:15},cat:'eat',days:WEDSUN,hours:[['11:00','17:00']],mood:['eat'],who:['work','group'],time:['afternoon'],
+   t:{en:'Venezuelan arepas in a friendly neighbourhood spot, and the sugar cane juice is very much worth ordering. Lunch rather than dinner.',nl:'Venezolaanse arepas in een gezellige buurtzaak, en het suikerrietsap is echt de moeite waard. Meer lunch dan diner.',de:'Venezolanische Arepas in einem freundlichen Viertellokal, und der Zuckerrohrsaft lohnt sich sehr. Eher Mittag- als Abendessen.',es:'Arepas venezolanas en un local de barrio muy agradable, y el jugo de ca\u00F1a merece la pena. M\u00E1s para comer que para cenar.'},
+   tip:{en:'Trams 3 and 17 stop close by.',nl:'Tram 3 en 17 stoppen vlakbij.',de:'Tram 3 und 17 halten in der N\u00E4he.',es:'Los tranv\u00EDas 3 y 17 paran cerca.'}},
+  {id:'crosta',n:'Crosta Pizzabar',a:'Keizerstraat 33, Scheveningen',w:{hiex:0,ibis:0},via:{en:'Tram 1, about 20 min',nl:'Tram 1, ca. 20 min',de:'Tram 1, ca. 20 Min.',es:'Tranv\u00EDa 1, unos 20 min'},cat:'eat',days:WEDSUN,hours:[['12:30','22:00']],mood:['eat','air'],who:['two','group'],time:['evening'],
+   t:{en:'The finest pizza we know of in this country, in the old village end of Scheveningen. Make an evening of it and walk down to the sea afterwards.',nl:'De lekkerste pizza die wij in dit land kennen, in het oude dorp van Scheveningen. Maak er een avond van en loop daarna naar zee.',de:'Die beste Pizza, die wir in diesem Land kennen, im alten Dorfteil von Scheveningen. Machen Sie einen Abend daraus und gehen Sie danach ans Meer.',es:'La mejor pizza que conocemos en este pa\u00EDs, en el casco antiguo de Scheveningen. Haga noche de ello y baje luego al mar.'}},
+  {id:'ijs',n:'Het IJskabinet',a:'Plaats 31',w:{hiex:5,ibis:6},cat:'sweet',days:ALL,hours:[['12:00','22:00']],mood:['sweet','off'],who:['two','group','work'],time:['half','hour','afternoon','evening'],
+   t:{en:'The nicest small treat within a few minutes of our door, and a favourite with our guests all year round.',nl:'De lekkerste kleine traktatie op een paar minuten van onze deur, en al jaren een favoriet van onze gasten.',de:'Die sch\u00F6nste kleine Belohnung wenige Minuten von unserer T\u00FCr entfernt, bei unseren G\u00E4sten das ganze Jahr beliebt.',es:'El mejor capricho a pocos minutos de nuestra puerta, y un cl\u00E1sico entre nuestros hu\u00E9spedes.'},
+   perk:{en:'A scoop on the house with your room key',nl:'Een bolletje van het huis op vertoon van uw kamersleutel',de:'Eine Kugel aufs Haus mit Ihrem Zimmerschl\u00FCssel',es:'Una bola por cuenta de la casa con su llave'}},
+  {id:'piet',n:'Piet Artisans of Flavour',a:'Piet Heinstraat 76',w:{hiex:20,ibis:10},cat:'sweet',days:ALL,hours:[['14:00','22:00']],hd:{0:[['12:00','22:00']],6:[['12:00','22:00']]},mood:['sweet'],who:['two','group','work'],time:['afternoon','evening'],
+   t:{en:'The best ice cream in the city, four doors along from Bartine, so the two make one easy walk.',nl:'Het beste ijs van de stad, vier deuren van Bartine, dus samen \u00E9\u00E9n fijne wandeling.',de:'Das beste Eis der Stadt, vier T\u00FCren neben Bartine, sodass beide einen sch\u00F6nen Spaziergang ergeben.',es:'El mejor helado de la ciudad, cuatro puertas m\u00E1s all\u00E1 de Bartine, as\u00ED que los dos hacen un paseo f\u00E1cil.'}},
+  {id:'gelato',n:'Club Gelato',a:'Prins Hendrikplein 9',w:{hiex:22,ibis:14},cat:'sweet',days:ALL,hours:[['12:00','22:00']],mood:['sweet','off'],who:['two','group'],time:['afternoon','evening'],
+   t:{en:'Gelato on a quiet circular square, with somewhere to sit outside when the weather allows.',nl:'Gelato op een rustig rond plein, met een plek buiten als het weer het toelaat.',de:'Gelato an einem ruhigen runden Platz, mit Sitzpl\u00E4tzen drau\u00DFen, wenn das Wetter mitspielt.',es:'Gelato en una plaza circular y tranquila, con sitio fuera cuando el tiempo lo permite.'}},
+  {id:'kleef',n:'Van Kleef Distillery Museum',a:'Lange Beestenmarkt 109',w:{hiex:13,ibis:5},cat:'see',days:TUESUN,hours:[['10:00','18:00']],hd:{0:[['13:00','18:00']]},mood:['see','off'],who:['two','work','group'],time:['hour','afternoon'],
+   t:{en:'A working nineteenth-century distillery with a museum, a courtyard and a tasting at the end.',nl:'Een werkende negentiende-eeuwse distilleerderij met museum, binnenplaats en een proeverij tot slot.',de:'Eine arbeitende Destillerie aus dem 19. Jahrhundert mit Museum, Innenhof und Verkostung zum Schluss.',es:'Una destiler\u00EDa del siglo XIX en funcionamiento, con museo, patio y una cata al final.'},
+   tip:{en:'Please call ahead if you would like the guided tasting. We can do that for you.',nl:'Bel vooraf voor de rondleiding met proeverij. Wij regelen dat graag.',de:'F\u00FCr die gef\u00FChrte Verkostung bitte vorher anrufen. Wir \u00FCbernehmen das gern.',es:'Llame antes si quiere la cata guiada. Lo hacemos por usted.'}},
+  {id:'escher',n:'Escher in the Palace',a:'Lange Voorhout 74',w:{hiex:5,ibis:12},cat:'see',days:TUESUN,hours:[['11:00','17:00']],mood:['see'],who:['two','work','group'],time:['hour','afternoon'],
+   t:{en:'A former royal palace filled with drawings that quietly play tricks on you. An hour is enough to enjoy it properly.',nl:'Een voormalig koninklijk paleis vol tekeningen die uw ogen bedriegen. Een uur is genoeg om er echt van te genieten.',de:'Ein ehemaliger K\u00F6nigspalast voller Zeichnungen, die Ihre Augen t\u00E4uschen. Eine Stunde gen\u00FCgt v\u00F6llig.',es:'Un antiguo palacio real lleno de dibujos que enga\u00F1an a la vista. Con una hora se disfruta de sobra.'}},
+  {id:'emmaus',n:'Emmaus Welvaartsresten',a:'Prinsegracht 36',w:{hiex:12,ibis:4},cat:'see',days:[4,5,6],hours:[['12:00','16:00']],hd:{6:[['12:00','17:00']]},mood:['see','off'],who:['two','work'],time:['hour','afternoon'],
+   t:{en:'A large second-hand shop spread over several rooms, with records, books, furniture and clothes. Worth an hour if you enjoy that sort of thing.',nl:'Een grote kringloopwinkel over meerdere zalen, met platen, boeken, meubels en kleding. Een uurtje waard als u daarvan houdt.',de:'Ein gro\u00DFer Secondhand-Laden \u00FCber mehrere R\u00E4ume, mit Platten, B\u00FCchern, M\u00F6beln und Kleidung. Eine Stunde wert, wenn Sie so etwas m\u00F6gen.',es:'Una gran tienda de segunda mano repartida en varias salas, con discos, libros, muebles y ropa. Merece una hora si le gusta ese tipo de cosas.'},
+   tip:{en:'Thursday to Saturday only, and short hours.',nl:'Alleen donderdag tot zaterdag, korte openingstijden.',de:'Nur Donnerstag bis Samstag, kurze \u00D6ffnungszeiten.',es:'Solo de jueves a s\u00E1bado y con horario corto.'}},
+  {id:'paard',n:'PAARD',a:'Prinsegracht 12',w:{hiex:11,ibis:3},cat:'off',days:ALL,hours:[['19:00','23:30']],mood:['off'],who:['group','two','work'],time:['evening'],
+   t:{en:"The city's main music venue, a few minutes from the hotel. Have a look at what is on tonight.",nl:'Het belangrijkste poppodium van de stad, op een paar minuten van het hotel. Kijk wat er vanavond speelt.',de:'Der wichtigste Musikclub der Stadt, wenige Minuten vom Hotel. Schauen Sie, was heute Abend l\u00E4uft.',es:'La principal sala de conciertos de la ciudad, a pocos minutos del hotel. Mire qu\u00E9 hay esta noche.'},
+   tip:{en:'We can print the programme for you at the desk.',nl:'Wij printen het programma graag voor u bij de receptie.',de:'Wir drucken Ihnen das Programm gern an der Rezeption aus.',es:'Le imprimimos el programa en recepci\u00F3n.'}},
+  {id:'filmhuis',n:'Filmhuis Den Haag',a:'Spui 191',w:{hiex:6,ibis:9},cat:'off',days:ALL,hours:[['10:00','23:59']],mood:['off','see'],who:['work','two'],time:['evening','afternoon'],
+   t:{en:'An independent cinema with a warm caf\u00E9 you are welcome to sit in without seeing a film. A kind option for a quiet evening alone.',nl:'Een filmhuis met een gezellig caf\u00E9 waar u ook zonder kaartje mag zitten. Fijn voor een rustige avond alleen.',de:'Ein Programmkino mit gem\u00FCtlichem Caf\u00E9, in dem Sie auch ohne Ticket sitzen d\u00FCrfen. Sch\u00F6n f\u00FCr einen ruhigen Abend allein.',es:'Un cine independiente con una cafeter\u00EDa acogedora donde puede sentarse sin ver pel\u00EDcula. Ideal para una noche tranquila.'},
+   tip:{en:'They do not admit latecomers, so allow a few minutes.',nl:'Laatkomers worden niet toegelaten, dus kom op tijd.',de:'Zu sp\u00E4t Kommende werden nicht eingelassen, planen Sie etwas Zeit ein.',es:'No admiten entradas tard\u00EDas, llegue con margen.'},
+   perk:{en:'\u20AC2 off a weeknight ticket',nl:'\u20AC2 korting op een doordeweeks kaartje',de:'\u20AC2 Rabatt auf ein Ticket unter der Woche',es:'\u20AC2 de descuento entre semana'}},
+  {id:'amare',n:'Amare',a:'Spuiplein 150',w:{hiex:5,ibis:10},cat:'off',days:ALL,hours:[['07:30','23:00']],mood:['off','see'],who:['work','two'],time:['half','hour','afternoon','evening'],
+   t:{en:'The ground floor is open to everyone, free of charge, with comfortable places to sit and something happening most days.',nl:'De begane grond is gratis toegankelijk, met fijne zitplekken en bijna elke dag iets te doen.',de:'Das Erdgeschoss ist f\u00FCr alle frei zug\u00E4nglich, mit bequemen Sitzpl\u00E4tzen und fast t\u00E4glich einem Programm.',es:'La planta baja es de acceso libre, con sitios c\u00F3modos para sentarse y algo programado casi cada d\u00EDa.'}},
+  {id:'kompaan',n:'Kompaan Thuishaven',a:'Saturnusstraat 55, Binckhorst',w:{hiex:0,ibis:0},via:{en:'About 15 min by bicycle',nl:'Ca. 15 min fietsen',de:'Ca. 15 Min. mit dem Rad',es:'Unos 15 min en bicicleta'},cat:'off',days:WEDSUN,hours:[['15:00','23:00']],mood:['off','air'],who:['group','work'],time:['evening'],
+   t:{en:'A working brewery with a large terrace and twenty taps, in the old industrial quarter. Relaxed, unpolished and very good fun.',nl:'Een echte brouwerij met een groot terras en twintig tapkranen, in de oude industriebuurt. Ontspannen en gezellig.',de:'Eine echte Brauerei mit gro\u00DFer Terrasse und zwanzig Zapfh\u00E4hnen im alten Industrieviertel. Entspannt und unkompliziert.',es:'Una f\u00E1brica de cerveza real con gran terraza y veinte grifos, en el antiguo barrio industrial. Relajada y muy divertida.'},
+   tip:{en:'We hire bicycles at reception.',nl:'Wij verhuren fietsen bij de receptie.',de:'An der Rezeption verleihen wir Fahrr\u00E4der.',es:'Alquilamos bicicletas en recepci\u00F3n.'}},
+  {id:'hofvijver',n:'Hofvijver & Lange Voorhout',a:'Hofvijver',w:{hiex:3,ibis:8},cat:'air',days:ALL,hours:[],noIg:true,mood:['air'],who:['work','two','group'],time:['half','hour'],
+   t:{en:'Out to the water behind parliament, up the avenue of lime trees and back past the palace. About twenty-five minutes, and the prettiest short walk in the centre.',nl:'Naar het water achter het Binnenhof, door de lindelaan en terug langs het paleis. Ongeveer 25 minuten, en de mooiste korte wandeling van het centrum.',de:'Zum Wasser hinter dem Parlament, die Lindenallee hinauf und am Palast vorbei zur\u00FCck. Etwa 25 Minuten, der sch\u00F6nste kurze Spaziergang im Zentrum.',es:'Hasta el agua detr\u00E1s del parlamento, por la avenida de tilos y de vuelta junto al palacio. Unos 25 minutos, el paseo corto m\u00E1s bonito del centro.'},
+   tip:{en:'Loveliest in the hour before sunset. Ask us and we will mark it on a map.',nl:'Het mooist in het uur voor zonsondergang. Wij tekenen het graag op een kaartje.',de:'Am sch\u00F6nsten in der Stunde vor Sonnenuntergang. Wir zeichnen es Ihnen gern ein.',es:'Precioso en la hora antes del atardecer. Se lo marcamos en un mapa.'}},
+  {id:'paleistuin',n:'Paleistuin',a:'Prinsessewal',w:{hiex:9,ibis:6},cat:'air',days:ALL,hours:[['08:00','20:00']],noIg:true,mood:['air','off'],who:['work','two','group'],time:['half','hour','afternoon'],
+   t:{en:'The garden behind the royal palace, open to the public and free. Lawns, a small lake and a great many benches. The easiest place to sit down and do nothing when you have half an hour between appointments.',nl:'De tuin achter het paleis, openbaar en gratis. Gazons, een vijver en heel veel bankjes. De makkelijkste plek om even niets te doen als u een half uur heeft.',de:'Der Garten hinter dem Palast, \u00F6ffentlich und kostenlos. Rasen, ein kleiner See und viele B\u00E4nke. Der einfachste Ort, um eine halbe Stunde einfach nichts zu tun.',es:'El jard\u00EDn detr\u00E1s del palacio real, p\u00FAblico y gratuito. C\u00E9sped, un peque\u00F1o lago y much\u00EDsimos bancos. El sitio m\u00E1s f\u00E1cil para sentarse y no hacer nada cuando tiene media hora.'},
+   tip:{en:'The gate closes at dusk, earlier in winter.',nl:'Het hek sluit bij zonsondergang, in de winter vroeger.',de:'Das Tor schlie\u00DFt bei Einbruch der Dunkelheit, im Winter fr\u00FCher.',es:'La puerta cierra al anochecer, antes en invierno.'}},
+  {id:'vrede',n:'Peace Palace & Scheveningse Bosjes',a:'Carnegieplein 2',w:{hiex:0,ibis:0},via:{en:'Tram 1, about 12\u201315 min',nl:'Tram 1, ca. 12\u201315 min',de:'Tram 1, ca. 12\u201315 Min.',es:'Tranv\u00EDa 1, unos 12\u201315 min'},cat:'air',days:ALL,hours:[],mood:['air','see'],who:['work','two','group'],time:['afternoon'],
+   t:{en:'Take tram 1 to the Peace Palace, which houses the International Court of Justice, look at the building and the peace flame from the gate, and then walk on into the Scheveningse Bosjes behind it. The woods run all the way to the dunes.',nl:'Neem tram 1 naar het Vredespaleis, waar het Internationaal Gerechtshof zit, bekijk het gebouw en de vredesvlam bij het hek en loop door de Scheveningse Bosjes erachter. Het bos loopt door tot de duinen.',de:'Mit Tram 1 zum Friedenspalast, Sitz des Internationalen Gerichtshofs; Geb\u00E4ude und Friedensflamme vom Tor aus ansehen und dann in die Scheveningse Bosjes dahinter laufen. Der Wald reicht bis zu den D\u00FCnen.',es:'Tome el tranv\u00EDa 1 al Palacio de la Paz, sede de la Corte Internacional de Justicia, mire el edificio y la llama de la paz desde la verja y siga hacia los Scheveningse Bosjes. El bosque llega hasta las dunas.'},
+   tip:{en:'The visitor centre is open Wed\u2013Sun, 12:00\u201317:00. The park is always open and free.',nl:'Het bezoekerscentrum is open wo\u2013zo, 12:00\u201317:00. Het park is altijd open en gratis.',de:'Das Besucherzentrum ist Mi\u2013So, 12\u201317 Uhr ge\u00F6ffnet. Der Park ist immer offen und kostenlos.',es:'El centro de visitantes abre mi\u00E9\u2013dom, 12:00\u201317:00. El parque siempre est\u00E1 abierto y es gratis.'}},
+  {id:'schev',n:'The old village of Scheveningen',a:'Keizerstraat, Scheveningen',w:{hiex:0,ibis:0},via:{en:'Tram 1, about 20 min',nl:'Tram 1, ca. 20 min',de:'Tram 1, ca. 20 Min.',es:'Tranv\u00EDa 1, unos 20 min'},cat:'air',days:ALL,hours:[],noIg:true,mood:['air','see'],who:['two','group'],time:['afternoon','evening'],
+   t:{en:'Most visitors go to the beach and stop there. The old fishing village sits just behind it, around Keizerstraat, with the harbour, the small streets and the church. Walk the village first, eat, and finish on the sand.',nl:'De meeste bezoekers gaan naar het strand en niet verder. Het oude vissersdorp ligt er vlak achter, rond de Keizerstraat, met de haven, de straatjes en de kerk. Eerst het dorp, dan eten, en eindig op het zand.',de:'Die meisten fahren zum Strand und bleiben dort. Das alte Fischerdorf liegt direkt dahinter, rund um die Keizerstraat, mit Hafen, kleinen Gassen und Kirche. Erst das Dorf, dann essen, zum Schluss der Sand.',es:'La mayor\u00EDa va a la playa y se queda ah\u00ED. El antiguo pueblo pesquero est\u00E1 justo detr\u00E1s, alrededor de Keizerstraat, con el puerto, las callejuelas y la iglesia. Primero el pueblo, luego comer, y termine en la arena.'},
+   tip:{en:'Crosta Pizzabar is on this street.',nl:'Crosta Pizzabar zit in deze straat.',de:'Crosta Pizzabar liegt in dieser Stra\u00DFe.',es:'Crosta Pizzabar est\u00E1 en esta calle.'}}
+];
+const IG = {}; // instagram handles, e.g. poentjak:'depoentjak' \u2014 filled in when known
+const THEMES = {
+  hiex: { primary:'#003271', accent:'#F26B21', onPrimaryMuted:'#B7C6DE', perkBg:'#FDEEE4', perkFg:'#B34A0F', font:"'Source Sans 3', system-ui, sans-serif", cat:{eat:'#F26B21', sweet:'#C2185B', air:'#2E8B57', see:'#003271', off:'#7A5288'} },
+  ibis: { primary:'#A50034', accent:'#1E1E1E', onPrimaryMuted:'rgba(255,255,255,.75)', perkBg:'#F7EEF0', perkFg:'#A50034', font:"'Nunito Sans', system-ui, sans-serif", cat:{eat:'#A50034', sweet:'#D4587A', air:'#4C8C4A', see:'#1E1E1E', off:'#8A7465'} }
+};
+const KEY = 'hiex-guestdesk.v2';
+const mins = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
+const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; };
+
+class Component extends DCLogic {
+  state = { L: null, screen: 0, ans: { time: null, who: null, mood: null }, saved: null, okMsg: '', sent: false, run: 0, now: new Date() };
+  componentDidMount() { this.setState({ saved: this.load() }); this.tick = setInterval(() => this.setState({ now: new Date() }), 60000); }
+  componentWillUnmount() { clearInterval(this.tick); }
+  theme() { return THEMES[this.props.theme || this.q('theme')] || THEMES[this.hotelKey()] || THEMES.hiex; }
+  cat() { return this.theme().cat; }
+  q(k) { try { return new URLSearchParams(location.search).get(k); } catch (e) { return null; } }
+  hotelKey() { const h = this.props.hotel || this.q('hotel'); return HOTELS[h] ? h : 'hiex'; }
+  key() { return KEY + '.' + this.hotelKey(); }
+  load() { try { return JSON.parse(localStorage.getItem(this.key())) || null; } catch (e) { return null; } }
+  save(v) { try { localStorage.setItem(this.key(), JSON.stringify(v)); } catch (e) {} }
+  lang() { return this.state.L || this.props.lang || 'en'; }
+  go(screen) { this.setState({ screen }); }
+  hoursToday(p, now) {
+    const d = now.getDay();
+    if (!p.days.includes(d)) return null;
+    return (p.hd && p.hd[d]) || p.hours;
+  }
+  // returns {state:'always'|'open'|'soon'|'later'|'closed', until, next}
+  status(p, now) {
+    const h = this.hoursToday(p, now);
+    if (h === null) return { state: 'closed' };
+    if (!h.length) return { state: 'always', left: 9999 };
+    const cur = now.getHours()*60 + now.getMinutes();
+    for (const [o, c] of h) {
+      let co = mins(o), cc = mins(c); if (cc <= co) cc += 24*60;
+      if (cur >= co && cur < cc) return { state: cc - cur <= 45 ? 'soon' : 'open', until: c, left: cc - cur };
+    }
+    const next = h.find(([o]) => mins(o) > cur);
+    return next ? { state: 'later', next: next[0], left: 0, opens: mins(next[0]) - cur } : { state: 'closed' };
+  }
+  // need: minutes of useful time required once there; travel: minutes to get there
+  fits(p, st, time, travel) {
+    if (st.state === 'closed') return false;
+    if (st.state === 'always') return true;
+    const need = { half: 20, hour: 40, afternoon: 60, evening: 75 }[time] || 40;
+    if (st.state === 'open' || st.state === 'soon') return st.left - travel >= need;
+    // opens later today: acceptable only for afternoon/evening, and within a reasonable wait
+    if (time === 'afternoon') return st.opens <= 120 && mins(st.next) < 16*60;
+    if (time === 'evening') return st.opens <= 150 && mins(st.next) <= 20*60;
+    return false;
+  }
+  ranked(all) {
+    const { ans, now, run } = this.state, hk = this.hotelKey();
+    const list = P.map(p => {
+      const st = this.status(p, now), w = p.w[hk], far = p.via || w > 10;
+      let s = 0;
+      if (p.mood.includes(ans.mood)) s += 5;
+      if (p.who.includes(ans.who)) s += 3;
+      if (p.time.includes(ans.time)) s += 4;
+      if ((ans.time === 'half' || ans.time === 'hour') && far) s -= 8;
+      if (ans.time === 'half' && w > 6) s -= 4;
+      if ((ans.time === 'half' || ans.time === 'hour') && w <= 8 && !p.via) s += 2;
+      if (st.state === 'soon' && ans.time !== 'half') s -= 2;
+      if (!this.fits(p, st, ans.time, p.via ? 20 : w)) s = -99;
+      s += (hash(p.id + ':' + run) % 100) / 100 * 1.5; // gentle variation between runs
+      return { p, s, st, w, far, fits: s > -50 };
+    });
+    return (all ? list.filter(x => x.fits) : list.filter(x => x.s > 3)).sort((a, b) => b.s - a.s || a.w - b.w);
+  }
+  pick() {
+    const r = this.ranked(), top = r.slice(0, 3);
+    let far = null;
+    if (this.state.ans.time === 'afternoon' || this.state.ans.time === 'evening') {
+      const ids = top.map(x => x.p.id), mood = this.state.ans.mood;
+      far = this.ranked(true).find(x => x.far && !ids.includes(x.p.id) && x.p.mood.includes(mood)) || null;
+    }
+    return { top, far };
+  }
+  answer(g, v) {
+    const ans = { ...this.state.ans, [g]: v };
+    const step = g === 'time' ? 1 : g === 'who' ? 2 : 3;
+    if (step === 3) {
+      this.setState({ ans, now: new Date() }, () => {
+        const { top, far } = this.pick(), prev = this.load() || {};
+        const list = top.map(x => x.p).concat(far ? [far.p] : []);
+        const saved = { places: list.map(p => ({ n: p.n, went: null, rec: null })), other: prev.other || '', service: prev.service || '', lang: this.lang() };
+        this.save(saved);
+        this.setState({ saved, screen: 4, sent: false, okMsg: '' });
+      });
+    } else this.setState({ ans, screen: step + 1 });
+  }
+  setRev(i, f, v) {
+    const d = { ...this.state.saved, places: this.state.saved.places.map((p, k) => k === i ? { ...p, [f]: v } : p) };
+    this.save(d); this.setState({ saved: d });
+  }
+  setField(f, v) { const d = { ...this.state.saved, [f]: v }; this.save(d); this.setState({ saved: d, okMsg: LANGS[this.lang()].saved }); }
+  card(x, T, L) {
+    const { p, st, w } = x, hk = this.hotelKey();
+    const dist = p.via ? p.via[L] : w + ' ' + T.walk;
+    const h = this.hoursToday(p, this.state.now) || [];
+    const hours = h.length ? h.map(([o, c]) => o + '\u2013' + c).join(', ') : '';
+    const status = st.state === 'always' ? T.always : st.state === 'open' ? T.openNow : st.state === 'soon' ? T.closesSoon + ' \u00B7 ' + st.until : st.state === 'later' ? T.opensAt + ' ' + st.next : T.closed;
+    const statusColor = st.state === 'open' || st.state === 'always' ? '#2E8B57' : st.state === 'soon' || st.state === 'later' ? '#B34A0F' : '#8A94A6';
+    const q = encodeURIComponent(p.n + ' ' + p.a + ' Den Haag');
+    const ig = IG[p.id] ? 'https://www.instagram.com/' + IG[p.id] + '/' : p.noIg ? 'https://www.google.com/maps/search/?api=1&query=' + q : 'https://www.instagram.com/explore/search/keyword/?q=' + encodeURIComponent(p.n);
+    return { n: p.n, a: p.a, dist, hours, status, statusColor, color: this.cat()[p.cat], text: p.t[L], hasTip: !!p.tip, tip: p.tip ? p.tip[L] : '', hasPerk: !!p.perk, perk: p.perk ? p.perk[L] : '', ig, maps: 'https://www.google.com/maps/search/?api=1&query=' + q };
+  }
+  renderVals() {
+    const L = this.lang(), T = LANGS[L], { screen, saved, now } = this.state;
+    const pr = this.theme().primary; const yn = on => on ? { bg: pr, bd: pr, fg: '#fff' } : { bg: '#F4F6FA', bd: '#D4DBE6', fg: '#1B2A41' };
+    const groups = [['time', T.a1, ['half', 'hour', 'afternoon', 'evening']], ['who', T.a2, ['work', 'two', 'group']], ['mood', T.a3, ['eat', 'sweet', 'air', 'see', 'off']]];
+    const isQ = screen >= 1 && screen <= 3, g = isQ ? groups[screen - 1] : null;
+    const hasSaved = !!(saved && saved.places && saved.places.length);
+    const res = screen === 4 ? this.pick() : { top: [], far: null };
+    const showNotes = this.props.showNotes ?? true;
+    return {
+      showNotes, wrapMinH: showNotes ? '100vh' : '0', wrapPad: showNotes ? '40px 24px' : '0', wrapBg: showNotes ? '#E9EDF3' : 'transparent',
+      hotel: HOTELS[this.hotelKey()], th: this.theme(),
+      clock: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'),
+      todayLabel: T.dayNames[now.getDay()] + ', ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0'),
+      t: T,
+      langs: Object.keys(LANGS).map(k => ({ label: LANGS[k].label, on: k === L, bg: k === L ? '#fff' : 'transparent', fg: k === L ? pr : 'rgba(255,255,255,.8)', pick: () => this.setState({ L: k }) })),
+      accentOr: this.theme().accent,
+      progPct: isQ ? (screen / 3 * 100) + '%' : screen >= 4 ? '100%' : '0%',
+      isS0: screen === 0, isQ, isS4: screen === 4, isS5: screen === 5,
+      stepLabel: isQ ? T.step[screen - 1] : '', question: isQ ? T.q[screen - 1] : '',
+      options: g ? g[1].map((label, k) => ({ label, color: g[0] === 'mood' ? this.cat()[g[2][k]] : '#D4DBE6', pick: () => this.answer(g[0], g[2][k]) })) : [],
+      start: () => this.go(1), back: () => this.go(screen - 1),
+      toRev: () => this.go(5), revBack: () => this.go(0),
+      again: () => this.setState(s => ({ ans: { time: null, who: null, mood: null }, screen: 0, run: s.run + 1 })),
+      hasSaved, noSaved: !hasSaved, noCards: !res.top.length,
+      cards: res.top.map(x => this.card(x, T, L)),
+      hasFurther: !!res.far, far: res.far ? this.card(res.far, T, L) : {},
+      reviews: hasSaved ? saved.places.map((p, i) => {
+        const wy = yn(p.went === 'yes'), wn = yn(p.went === 'no'), ry = yn(p.rec === 'yes'), rn = yn(p.rec === 'no');
+        return { n: p.n,
+          wentYes: () => this.setRev(i, 'went', 'yes'), wentYesBg: wy.bg, wentYesBd: wy.bd, wentYesFg: wy.fg,
+          wentNo: () => this.setRev(i, 'went', 'no'), wentNoBg: wn.bg, wentNoBd: wn.bd, wentNoFg: wn.fg,
+          recYes: () => this.setRev(i, 'rec', 'yes'), recYesBg: ry.bg, recYesBd: ry.bd, recYesFg: ry.fg,
+          recNo: () => this.setRev(i, 'rec', 'no'), recNoBg: rn.bg, recNoBd: rn.bd, recNoFg: rn.fg };
+      }) : [],
+      other: (saved && saved.other) || '', service: (saved && saved.service) || '',
+      setOther: e => this.setField('other', e.target.value), setService: e => this.setField('service', e.target.value),
+      okMsg: this.state.okMsg, sent: this.state.sent, sendOpacity: this.state.sent ? 0.55 : 1,
+      send: () => { const d = { ...saved, sentAt: new Date().toISOString() }; this.save(d); this.setState({ saved: d, sent: true, okMsg: T.sent }); }
+    };
+  }
+}
+return Component;
+})();
+dcRegister('Holiday Inn Express Guest App', GuestApp, 'tpl-app');
+</script>
+
+<script>
+/* Pitch - logic verbatim from the original design file */
+const Pitch = (function () {
+const HOTELS = {
+  hiex: { mark:'H', name:'Holiday Inn Express', line:'The Hague \u2014 Parliament \u00B7 Lange Houtstraat 5', full:'Holiday Inn Express The Hague \u2014 Parliament', dPoentjak:9, dIjs:5, dFilmhuis:6 },
+  ibis: { mark:'i', name:'ibis Den Haag City Centre', line:'Jan Hendrikstraat 10', full:'ibis Den Haag City Centre', dPoentjak:7, dIjs:6, dFilmhuis:9 }
+};
+const TABS = [['guest','1 \u00B7 Try it as a guest'],['hotel','2 \u00B7 Why I built this']];
+
+class Component extends DCLogic {
+  state = { tab: null };
+  tab() { return this.state.tab || this.props.startTab || 'guest'; }
+  renderVals() {
+    const tab = this.tab(), hotelKey = HOTELS[this.props.hotel] ? this.props.hotel : 'ibis';
+    return {
+      hotelKey, hotel: HOTELS[hotelKey],
+      tabs: TABS.map(([k, label]) => ({ label, on: tab === k, fg: tab === k ? '#fff' : 'rgba(255,255,255,.72)', line: tab === k ? '#A50034' : 'transparent', pick: () => { this.setState({ tab: k }); window.scrollTo({ top: 0 }); } })),
+      isGuest: tab === 'guest', isHotel: tab === 'hotel',
+      bars: [['Somewhere nearby to eat', 38], ['Fresh air, a walk, the sea', 24], ['A museum or something beautiful', 21], ['Somewhere to sit and unwind', 17]].map(([label, p]) => ({ label, w: p + '%', pct: p + '%' }))
+    };
+  }
+}
+return Component;
+})();
+dcRegister('Pitch', Pitch, 'tpl-pitch');
+const pitchInstance = dcMount('Pitch', {}, document.getElementById('pitch-root'));
+
+/* the old cross-file link now just switches back to the first tab */
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-go-guest]');
+  if (!a) return;
+  e.preventDefault();
+  pitchInstance.setState({ tab: 'guest' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
